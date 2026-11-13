@@ -1,0 +1,447 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/instrument-sans';
+@import '@fontsource-variable/newsreader';
+
+/*
+ * CampaignLens design system.
+ * Warm neutral surfaces, one deep green accent, hairline borders, and numbers
+ * set in tabular figures. Tokens live here; components below are the only
+ * place these values are combined, so screens stay consistent.
+ */
+@theme {
+  --font-sans: 'Instrument Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
+
+  --color-canvas: #f5f2ea;
+  --color-surface: #fffdf8;
+  --color-sunken: #eeeadf;
+  --color-line: #ded8c8;
+  --color-line-strong: #c4bca8;
+
+  --color-ink: #1b231f;
+  --color-ink-2: #46504a;
+  --color-ink-3: #636b63;
+
+  --color-brand: #1b4d3e;
+  --color-brand-strong: #123629;
+  --color-brand-soft: #e2ece5;
+  --color-brand-line: #b9cfc2;
+
+  --color-ok: #1a6340;
+  --color-ok-soft: #e1efe6;
+  --color-warn: #7a4f00;
+  --color-warn-soft: #f9eed3;
+  --color-danger: #9a2a1e;
+  --color-danger-soft: #f9e5e0;
+  --color-info: #1f4e79;
+  --color-info-soft: #e3ecf5;
+
+  /* Chart series colours, validated for colour-vision deficiency against the surface (see docs/DECISIONS.md). */
+  --color-chart-1: #23805a;
+  --color-chart-2: #8a63b8;
+
+  --radius-control: 6px;
+  --radius-panel: 10px;
+  --shadow-pop: 0 12px 32px -12px rgb(27 35 31 / 0.28), 0 2px 6px rgb(27 35 31 / 0.08);
+}
+
+@layer base {
+  html {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3 {
+    color: var(--color-ink);
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  a {
+    color: inherit;
+  }
+  /* One focus treatment everywhere: visible on any background, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  ::selection {
+    background: var(--color-brand-soft);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Typography */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+  .num {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: 'tnum' 1, 'lnum' 1;
+  }
+  .muted {
+    color: var(--color-ink-3);
+  }
+  .link {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-decoration-color: var(--color-brand-line);
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Surfaces */
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-panel);
+  }
+  .panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .panel-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .panel-body {
+    padding: 1.1rem;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-size: 0.9rem;
+    font-weight: 550;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 120ms, border-color 120ms;
+  }
+  .btn:hover {
+    background: var(--color-sunken);
+  }
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: var(--color-brand);
+    border-color: var(--color-brand);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--color-brand-strong);
+  }
+  .btn-danger {
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #fff;
+  }
+  .btn-danger:hover {
+    background: #7e2118;
+  }
+  .btn-quiet {
+    border-color: transparent;
+    background: transparent;
+    color: var(--color-ink-2);
+  }
+  .btn-sm {
+    min-height: 1.85rem;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.82rem;
+  }
+
+  /* Form controls */
+  .label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-ink-2);
+  }
+  .input,
+  .select,
+  .textarea {
+    width: 100%;
+    min-height: 2.25rem;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+    background: #fff;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 0.9rem;
+  }
+  .select {
+    padding-right: 1.8rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2346504a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+  }
+  .textarea {
+    min-height: 7rem;
+    line-height: 1.5;
+    resize: vertical;
+  }
+  .input:hover,
+  .select:hover,
+  .textarea:hover {
+    border-color: var(--color-ink-3);
+  }
+  .input[aria-invalid='true'],
+  .select[aria-invalid='true'] {
+    border-color: var(--color-danger);
+  }
+  .hint {
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--color-ink-3);
+  }
+  .field-error {
+    margin-top: 0.3rem;
+    font-size: 0.82rem;
+    font-weight: 550;
+    color: var(--color-danger);
+  }
+
+  /* Status: always text plus a shape, never colour alone. */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-sunken);
+    color: var(--color-ink-2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  .badge-ok {
+    background: var(--color-ok-soft);
+    border-color: #bcd9c7;
+    color: var(--color-ok);
+  }
+  .badge-warn {
+    background: var(--color-warn-soft);
+    border-color: #e6d19a;
+    color: var(--color-warn);
+  }
+  .badge-danger {
+    background: var(--color-danger-soft);
+    border-color: #e9bdb5;
+    color: var(--color-danger);
+  }
+  .badge-info {
+    background: var(--color-info-soft);
+    border-color: #bccfe3;
+    color: var(--color-info);
+  }
+  .badge-brand {
+    background: var(--color-brand-soft);
+    border-color: var(--color-brand-line);
+    color: var(--color-brand);
+  }
+
+  .notice {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--color-line);
+    border-left-width: 3px;
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    font-size: 0.88rem;
+  }
+  .notice-info {
+    border-left-color: var(--color-info);
+    background: var(--color-info-soft);
+  }
+  .notice-warn {
+    border-left-color: var(--color-warn);
+    background: var(--color-warn-soft);
+  }
+  .notice-danger {
+    border-left-color: var(--color-danger);
+    background: var(--color-danger-soft);
+  }
+  .notice-ok {
+    border-left-color: var(--color-ok);
+    background: var(--color-ok-soft);
+  }
+
+  /* Tables: dense, right-aligned numbers, horizontal scroll inside the panel only. */
+  .table-wrap {
+    /* Positioned so visually hidden text inside a wide table is clipped with it instead of widening the page. */
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  .table th {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--color-line-strong);
+    background: var(--color-surface);
+    color: var(--color-ink-3);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .table td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: top;
+  }
+  .table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .table tbody tr:hover td {
+    background: #faf7ef;
+  }
+  .table .r {
+    text-align: right;
+    font-variant-numeric: tabular-nums lining-nums;
+    white-space: nowrap;
+  }
+  .table th.r {
+    text-align: right;
+  }
+  .table tfoot td {
+    border-top: 1px solid var(--color-line-strong);
+    border-bottom: 0;
+    font-weight: 600;
+  }
+
+  /* Dialog */
+  dialog.dialog {
+    width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-panel);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-pop);
+  }
+  dialog.dialog::backdrop {
+    background: rgb(27 35 31 / 0.45);
+  }
+
+  /* Segmented control */
+  .segmented {
+    display: inline-flex;
+    padding: 2px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-sunken);
+  }
+  .segmented button,
+  .segmented a {
+    padding: 0.2rem 0.65rem;
+    border-radius: 4px;
+    color: var(--color-ink-2);
+    font-size: 0.82rem;
+    font-weight: 550;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .segmented [aria-pressed='true'],
+  .segmented [aria-current='true'] {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: 0 0 0 1px var(--color-line-strong);
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 0.75rem;
+    top: -4rem;
+    z-index: 50;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-control);
+    background: var(--color-brand);
+    color: #fff;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 0.75rem;
+  }
+}
+
+/* Printing a report from the browser: white page, no app chrome, no split cards or rows. */
+@media print {
+  html {
+    background: #fff;
+    font-size: 10.5pt;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  .report {
+    border: 0;
+    border-radius: 0;
+  }
+  .report-keep,
+  .report tr {
+    break-inside: avoid;
+  }
+  .report-section h2 {
+    break-after: avoid;
+  }
+}

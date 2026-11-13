@@ -1,0 +1,27 @@
+# Optional: a local PostgreSQL server, for running the app the way production does.
+# The default local setup needs none of this (DATABASE_URL=pglite://.data/dev).
+#
+#   docker compose up -d
+#   set DATABASE_URL=postgres://campaignlens:campaignlens@localhost:5432/campaignlens in .env.local
+#   npm run db:migrate && npm run db:seed
+#
+# The password below is for this local container only.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: campaignlens
+      POSTGRES_PASSWORD: campaignlens
+      POSTGRES_DB: campaignlens
+    ports:
+      - '5432:5432'
+    volumes:
+      - campaignlens-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U campaignlens']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  campaignlens-pg:
