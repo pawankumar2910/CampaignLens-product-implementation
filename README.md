@@ -1,5 +1,7 @@
 # CampaignLens
 
+[![CI](https://github.com/pawankumar2910/CampaignLens-product-implementation/actions/workflows/ci.yml/badge.svg)](https://github.com/pawankumar2910/CampaignLens-product-implementation/actions/workflows/ci.yml)
+
 Reporting and decision support for digital marketing agencies. An account manager imports campaign exports, sees what changed against the previous period, gets a short list of things to investigate, checks budget pacing, and sends the client a branded report.
 
 ![Overview of a client workspace](docs/screenshots/01-overview.png)
@@ -20,6 +22,8 @@ Spreadsheets make it easy to get the first answer subtly wrong (averaged ratios,
 No account, ad platform connection or API key is needed.
 
 ```sh
+git clone https://github.com/pawankumar2910/CampaignLens-product-implementation.git
+cd CampaignLens-product-implementation
 npm ci
 npm run dev
 ```
@@ -140,7 +144,7 @@ Limits: 5 MB and 20,000 rows per file. Header names from common Google Ads and M
 | Integration (`tests/integration`) | 29 | Migrations, persistence, role permissions, cross-agency isolation, invitations, imports end to end, report snapshots, share-link expiry and revocation, demo dataset, PDF content and page count |
 | Browser (`tests/e2e`) | 4 | Demo onboarding, client selection, valid import, validation failure, repeat import, filtering, report creation, PDF download, sharing and revocation; sign-up, roles and isolation over HTTP; 390px layout; keyboard use |
 
-No test calls an external or paid service. What was run, and what was not, is in [docs/RELEASE-CHECKLIST.md](docs/RELEASE-CHECKLIST.md).
+No test calls an external or paid service. Every push and pull request runs three CI jobs: lint, types, tests and build; the browser tests; and the migrations plus the same test suite on a PostgreSQL server. What was run, and what was not, is in [docs/RELEASE-CHECKLIST.md](docs/RELEASE-CHECKLIST.md).
 
 ## Deployment
 

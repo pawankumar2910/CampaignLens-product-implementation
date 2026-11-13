@@ -1,6 +1,6 @@
 # Release checklist
 
-Evidence as of 12 November 2026, on Windows 11 with Node.js 24.19.0. Each line is marked **Passed**, **Failed** or **Not run**. Nothing is marked passed unless it was executed in this workspace on the final code.
+Evidence as of 13 November 2026. Local checks were run on Windows 11 with Node.js 24.19.0; CI ran on GitHub Actions (Ubuntu, Node.js 24). Each line is marked **Passed**, **Failed** or **Not run**. Nothing is marked passed unless it was actually executed on the committed code.
 
 ## Automated checks
 
@@ -12,7 +12,12 @@ Evidence as of 12 November 2026, on Windows 11 with Node.js 24.19.0. Each line i
 | Integration tests on in-memory PostgreSQL (PGlite) | `npm test` | **Passed**, 29 tests |
 | Production build | `next build` (run by the browser-test server) | **Passed**, no warnings |
 | Browser tests against the production build | `npm run test:e2e` | **Passed**, 4 tests. Run three times in a row after the last test fix, plus once more on the final code: all green |
-| Same suite through the production database driver | `TEST_DATABASE_URL=postgres://… npm test` | **Passed**, 82 tests, with `node-postgres` talking the PostgreSQL wire protocol to a PGlite socket server. See "Not run" for what this does not cover |
+| Same suite through the production database driver, locally | `TEST_DATABASE_URL=postgres://… npm test` | **Passed**, 82 tests, with `node-postgres` talking the PostgreSQL wire protocol to a PGlite socket server |
+| GitHub Actions, job "Lint, types, tests, build" | push to `main`, commit `27f1f9c` | **Passed** |
+| GitHub Actions, job "Browser tests" | same run | **Passed** |
+| GitHub Actions, job "Migrations and integration tests on PostgreSQL" (PostgreSQL 17 service container) | same run | **Passed**. This is the first run of the migrations and the suite against a real PostgreSQL server |
+
+CI evidence: [run 43479014546](https://github.com/pawankumar2910/CampaignLens-product-implementation/actions/runs/43479014546). The job results were read from GitHub; the logs were not reviewed line by line.
 
 ### What the tests cover
 
@@ -65,8 +70,7 @@ Evidence as of 12 November 2026, on Windows 11 with Node.js 24.19.0. Each line i
 
 | Item | Why | What to do |
 |---|---|---|
-| Tests against a real PostgreSQL server | The Docker daemon was not running on this machine. The driver path was exercised through the wire protocol only | `docker compose up -d`, then run `npm test` with `TEST_DATABASE_URL` set as in `.env.example`. CI has a job for this |
-| GitHub Actions workflow (`.github/workflows/ci.yml`) | There is no remote repository yet | Push and confirm all three jobs are green |
+| A real PostgreSQL server on a developer machine | The Docker daemon was not running here. CI covers it on a PostgreSQL 17 service container (passed, see above) | Optional: `docker compose up -d`, then run `npm test` with `TEST_DATABASE_URL` set as in `.env.example` |
 | Deployment to a hosting provider | No hosting or database credentials. Nothing has been deployed and there is no live URL | Follow docs/DEPLOYMENT.md, then its post-deploy checks |
 | `npm run db:seed` | Not executed; the browser tests create their data through the interface instead | Run it once locally and sign in with the printed details |
 | Browsers other than Chromium | Only Chromium is installed for the tests | Add Firefox and WebKit projects to `playwright.config.ts` |
@@ -77,9 +81,9 @@ Evidence as of 12 November 2026, on Windows 11 with Node.js 24.19.0. Each line i
 | Load and performance | Not measured. No benchmark is claimed | Measure with a client of 50,000+ rows before relying on it at that size |
 | Security review or penetration test | Not performed. Authorization and isolation are tested; that is not the same thing | Review before real client data is stored |
 
-## Before publishing the repository
+## Publishing
 
-- [ ] `git init`, review `git status`, and confirm that only synthetic data and no `.env.local` is staged.
-- [ ] Push, and wait for CI to pass.
-- [ ] Replace nothing in the README with invented results: there is no live URL, no customer, and no measured time saving.
-- [ ] Add a licence if you want to grant reuse rights.
+- [x] Repository initialized; staged files reviewed before the first commit: synthetic data only, no `.env.local`, no database files, no build output, and a scan for secrets found none.
+- [x] Pushed to https://github.com/pawankumar2910/CampaignLens-product-implementation (public). CI passed on the first push.
+- [ ] Deploy (docs/DEPLOYMENT.md) and add the live URL to the README only after the post-deploy checks pass. Until then there is no live URL, no customer, and no measured time saving to claim.
+- [ ] Add a licence if you want to grant reuse rights. Without one, others may read the code but have no permission to reuse it.

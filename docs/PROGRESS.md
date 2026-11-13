@@ -1,6 +1,8 @@
 # CampaignLens progress
 
-Last updated: 13 November 2026. All seven milestones are built and verified locally. Not deployed, not committed to git.
+Last updated: 13 November 2026. All seven milestones are built, verified locally, pushed to GitHub, and passing CI. Not deployed.
+
+Repository: https://github.com/pawankumar2910/CampaignLens-product-implementation
 
 ## Milestones
 
@@ -32,12 +34,14 @@ Last updated: 13 November 2026. All seven milestones are built and verified loca
 | `npm run test:e2e` (builds the app, then 4 browser tests) | Passed |
 | Same 82 tests through `node-postgres` over the PostgreSQL wire protocol | Passed on 12 November; the code under test has not changed since |
 | Exported PDF inspected by eye | Passed: 4 pages, footers and page numbers, no stranded headings or split cards |
+| GitHub Actions on commit `27f1f9c`: lint/types/tests/build, browser tests, and the suite on a PostgreSQL 17 service | Passed, all three jobs ([run](https://github.com/pawankumar2910/CampaignLens-product-implementation/actions/runs/43479014546)) |
 
 Details, the list of defects found and fixed, and everything that was **not** run are in docs/RELEASE-CHECKLIST.md.
 
 ## Open issues and known limits
 
-- Not run: a real PostgreSQL server, the GitHub Actions workflow, a deployment, `npm run db:seed`, browsers other than Chromium, a screen reader, an automated accessibility scan.
+- Not run: a deployment, `npm run db:seed`, browsers other than Chromium, a screen reader, an automated accessibility scan.
+- No licence file yet.
 - A not-found page inside the app is streamed with HTTP 200 (the content is correct and reveals nothing). Removing `src/app/(app)/loading.tsx` would give a 404 status at the cost of the loading state.
 - The PDF uses built-in Latin fonts with the library's default line height, which is tight. Non-Latin text prints as "?".
 - Rate limits are in memory per server instance.
@@ -48,7 +52,7 @@ Details, the list of defects found and fixed, and everything that was **not** ru
 
 ## Next steps
 
-1. `git init`, review what would be committed, commit, push to GitHub, and confirm the three CI jobs pass (this is the first run on a real PostgreSQL server).
-2. Deploy following docs/DEPLOYMENT.md and run its post-deploy checks. Only then add a live URL to the README.
+1. Deploy following docs/DEPLOYMENT.md and run its post-deploy checks. Only then add a live URL to the README and to the repository's About field.
+2. Decide on a licence and add it.
 3. Add `@axe-core/playwright` to the browser tests and do a screen-reader pass on the import wizard and the chart.
 4. Product: previous-period comparison is done; the natural next features are saved column mappings per source and a second comparison mode (same period last year).
